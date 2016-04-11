@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hei, John!"
+        android:id="@+id/heiMsg"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="#fff"
         android:layout_marginTop="20dp"/>
@@ -38,7 +39,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/chat"
+                android:id="@+id/chatRL"
                 android:layout_weight="1"
                 android:background="#3949AB">
                 <ImageView
@@ -59,7 +60,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/Notes"
+                android:id="@+id/notesRL"
                 android:layout_weight="1"
                 android:background="#3949AB">
                 <ImageView
@@ -86,7 +87,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/notification"
+                android:id="@+id/todoRL"
                 android:layout_weight="1"
                 android:background="#303F9F">
                 <ImageView
@@ -107,7 +108,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/location"
+                android:id="@+id/locationRL"
                 android:layout_weight="1"
                 android:background="#303F9F">
                 <ImageView
@@ -134,7 +135,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/reminder"
+                android:id="@+id/reminderRL"
                 android:layout_weight="1"
                 android:background="#283593">
                 <ImageView
@@ -155,7 +156,7 @@
             <RelativeLayout
                 android:layout_width="90dp"
                 android:layout_height="80dp"
-                android:id="@+id/settings"
+                android:id="@+id/settingsRL"
                 android:layout_weight="1"
                 android:background="#283593">
                 <ImageView

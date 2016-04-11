@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@android:drawable/stat_notify_chat"
+            android:title="Chat" />
+        <item
+            android:id="@+id/nav_notes"
+            android:src="@android:drawable/ic_menu_edit"
+            android:title="Notes" />
+        <item
+            android:id="@+id/nav_todo"
+            android:src="@android:drawable/ic_menu_agenda"
+            android:title="Todo" />
+        <item
+            android:id="@+id/nav_location"
+            android:src="@android:drawable/ic_dialog_map"
+            android:title="Location" />
+        <item
+            android:id="@+id/nav_reminder"
+            android:src="@android:drawable/ic_popup_reminder"
+            android:title="Remainder" />
+        <item
+            android:id="@+id/nav_settings"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Feedback" />
+        </menu>
+    </item>
+
+</menu>
