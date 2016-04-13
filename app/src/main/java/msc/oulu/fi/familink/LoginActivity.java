@@ -3,6 +3,8 @@ package msc.oulu.fi.familink;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -39,6 +41,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    SharedPreferences sharedPreferences;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -309,9 +312,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                sharedPreferences = getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("user",mEmail);
+                editor.putString("pass",mPassword);
+                editor.commit();
+            } catch (Exception e) {
                 return false;
             }
 

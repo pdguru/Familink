@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="msc.oulu.fi.familink.NavigationRootActivity"
-    tools:showIn="@layout/app_bar_navigation_root">
+    tools:showIn="@layout/app_bar_navigation_root"
+    android:id="@+id/navigationRootRL">
 
 </RelativeLayout>

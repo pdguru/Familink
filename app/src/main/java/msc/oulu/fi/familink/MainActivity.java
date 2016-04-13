@@ -40,17 +40,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.chatRL: Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
-                                startActivity(chatIntent);break;
-            case R.id.notesRL: Intent notesIntent = new Intent(MainActivity.this, NotesActivity.class);
+            case R.id.chatRL: Intent chatIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                chatIntent.putExtra("section","Chat");
+                startActivity(chatIntent);break;
+            case R.id.notesRL: Intent notesIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                notesIntent.putExtra("section","Notes");
                 startActivity(notesIntent);break;
-            case R.id.todoRL: Intent todoIntent = new Intent(MainActivity.this, TodoActivity.class);
+            case R.id.todoRL: Intent todoIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                todoIntent.putExtra("section","Todo");
                 startActivity(todoIntent);break;
-            case R.id.locationRL: Intent locIntent = new Intent(MainActivity.this, LocationActivity.class);
+            case R.id.locationRL: Intent locIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                locIntent.putExtra("section","Location");
                 startActivity(locIntent);break;
-            case R.id.reminderRL: Intent reminderIntent = new Intent(MainActivity.this, ReminderActivity.class);
+            case R.id.reminderRL: Intent reminderIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                reminderIntent.putExtra("section","Remainders");
                 startActivity(reminderIntent);break;
-            case R.id.settingsRL: Intent settingIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            case R.id.settingsRL: Intent settingIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
+                settingIntent.putExtra("section","Settings");
                 startActivity(settingIntent);break;
         }
 
