@@ -14,10 +14,10 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@android:drawable/sym_def_app_icon"
+        android:src="@raw/user"
         android:layout_gravity="center_horizontal"
         android:background="#fff"
-        android:padding="1dp"/>
+        android:padding="1dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,9 +43,10 @@
                 android:layout_weight="1"
                 android:background="#3949AB">
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@android:drawable/stat_notify_chat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@raw/chat"
+                    android:tint="#fff"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/chatIcon"
                     android:layout_margin="2dp"/>
@@ -64,11 +65,12 @@
                 android:layout_weight="1"
                 android:background="#3949AB">
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@android:drawable/ic_menu_edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@raw/notes"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/notesIcon"
+                    android:tint="#fff"
                     android:layout_margin="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,11 +93,12 @@
                 android:layout_weight="1"
                 android:background="#303F9F">
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@android:drawable/ic_menu_agenda"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@raw/todo"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/todoIcon"
+                    android:tint="#fff"
                     android:layout_margin="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,11 +115,12 @@
                 android:layout_weight="1"
                 android:background="#303F9F">
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@android:drawable/ic_dialog_map"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@raw/location"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/locIcon"
+                    android:tint="#fff"
                     android:layout_margin="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,7 +145,8 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@android:drawable/ic_popup_reminder"
+                    android:src="@raw/reminders"
+                    android:tint="#fff"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/reminderIcon"
                     android:layout_margin="2dp" />
@@ -160,11 +165,12 @@
                 android:layout_weight="1"
                 android:background="#283593">
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@android:drawable/ic_menu_preferences"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@raw/settings"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/settingsIcon"
+                    android:tint="#fff"
                     android:layout_margin="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
