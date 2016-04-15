@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Familink</string>
-<<<<<<< HEAD
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -25,11 +24,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-=======
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_chat">ChatActivity</string>
-    <string name="chat_hint">Miten mene?</string>
-    <string name="send_button_text">Send</string>
+    <string name="title_activity_chat">Talk to your close ones</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -119,6 +114,4 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Settings</string>
->>>>>>> master
 </resources>

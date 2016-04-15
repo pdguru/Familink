@@ -2,10 +2,6 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-<<<<<<< HEAD
     <color name="colorAccent">#1A237E</color>
-=======
-    <color name="colorAccent">#FF4081</color>
     <color name="colorTextMessageBackground">#EEEEEE</color>
->>>>>>> master
 </resources>
