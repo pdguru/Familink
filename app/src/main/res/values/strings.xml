@@ -21,4 +21,7 @@
     <string name="action_settings">Settings</string>
     <string name="chat_hint">Type message here...</string>
     <string name="send_button_text">Send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
