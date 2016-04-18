@@ -1,5 +1,7 @@
 package msc.oulu.fi.familink;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.support.design.widget.NavigationView;
@@ -10,14 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 public class NavigationRootActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    RelativeLayout baseLayout;
+    FrameLayout baseLayout;
     LayoutInflater inflater;
-
+    FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +29,8 @@ public class NavigationRootActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         inflater = (LayoutInflater) NavigationRootActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        baseLayout = (RelativeLayout)findViewById(R.id.navigationRootRL);
+        baseLayout = (FrameLayout)findViewById(R.id.navigationRootRL);
+        fragmentManager = getFragmentManager();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -45,22 +49,28 @@ public class NavigationRootActivity extends AppCompatActivity
         baseLayout.removeAllViews();
         switch (section) {
             case "Chat":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_chat,null));
+                Fragment chatFragment = ChatFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, chatFragment) .commit();
                 break;
             case "Location":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_location,null));
+                Fragment locationFragment = LocationFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, locationFragment) .commit();
                 break;
             case "Notes":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_notes,null));
+                Fragment notesFragment = NotesFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, notesFragment) .commit();
                 break;
             case "Reminder":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_reminder,null));
+                Fragment reminderFragment = ReminderFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, reminderFragment) .commit();
                 break;
             case "Todo":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_todo,null));
+                Fragment todoFragment = TodoFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, todoFragment) .commit();
                 break;
             case "Settings":
-                baseLayout.addView(inflater.inflate(R.layout.fragment_settings,null));
+                Fragment settingsFragment = SettingsFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, settingsFragment) .commit();
                 break;
 //            case R.id.nav_send:
 //                baseLayout.addView(inflater.inflate(R.layout.fragment_chat,null));
@@ -95,29 +105,37 @@ public class NavigationRootActivity extends AppCompatActivity
         baseLayout.removeAllViews();
         switch (id) {
             case R.id.nav_chat:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_chat,null));
+                Fragment chatFragment = ChatFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, chatFragment) .commit();
                 break;
             case R.id.nav_location:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_location,null));
+                Fragment locationFragment = LocationFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, locationFragment) .commit();
                 break;
             case R.id.nav_notes:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_notes,null));
+                Fragment notesFragment = NotesFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, notesFragment) .commit();
                 break;
             case R.id.nav_reminder:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_reminder,null));
+                Fragment reminderFragment = ReminderFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, reminderFragment) .commit();
                 break;
             case R.id.nav_todo:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_todo,null));
+                Fragment todoFragment = TodoFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, todoFragment) .commit();
                 break;
             case R.id.nav_settings:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_settings,null));
+                Fragment settingsFragment = SettingsFragment.getInstance();
+                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, settingsFragment) .commit();
                 break;
-            case R.id.nav_send:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_chat,null));
-                break;
-            case R.id.nav_share:
-                baseLayout.addView(inflater.inflate(R.layout.fragment_chat,null));
-                break;
+//            case R.id.nav_send:
+//                Fragment locationFragment = LocationFragment.getInstance();
+//                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, locationFragment) .commit();
+//                break;
+//            case R.id.nav_share:
+//                Fragment locationFragment = LocationFragment.getInstance();
+//                fragmentManager.beginTransaction().replace(R.id.navigationRootRL, locationFragment) .commit();
+//                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -50,7 +50,7 @@ public class MessageAdapter extends SimpleCursorAdapter {
 
         // Set the chat message
         String chatMessage = cursor.getString(cursor.getColumnIndex(ChatHistoryManager.C_TEXT));
-        TextView textMessage = (TextView) row.findViewById(R.id.textMessage);
+        TextView textMessage = (TextView) row.findViewById(R.id.textUser);
         textMessage.setText(chatMessage.trim());
         textMessage.setLayoutParams(chatMessageParams);
 

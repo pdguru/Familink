@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 locIntent.putExtra("section","Location");
                 startActivity(locIntent);break;
             case R.id.reminderRL: Intent reminderIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
-                reminderIntent.putExtra("section","Remainders");
+                reminderIntent.putExtra("section","Reminder");
                 startActivity(reminderIntent);break;
             case R.id.settingsRL: Intent settingIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
                 settingIntent.putExtra("section","Settings");

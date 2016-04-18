@@ -1,72 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    >
+    android:layout_margin="3dp">
 
     <TextView
         android:id="@+id/textTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
+        android:text="10:10a"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:textColor="#fff"/>
-=======
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
->>>>>>> master
-
     <LinearLayout
         android:id="@+id/userAndMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
         android:orientation="horizontal"
         android:layout_margin="5dp"
         android:layout_below="@id/textTime">
 
         <ImageView
-            android:id="@+id/textUser"
+            android:id="@+id/userPic"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@android:drawable/sym_def_app_icon"
+            android:src="@raw/user"
             android:padding="2dp"
             android:layout_margin="2dp"/>
-=======
-        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textUser"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
->>>>>>> master
-
-        <TextView
-            android:id="@+id/textMessage"
-            android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content"
-            android:text="text message"
+            android:text="Hello there!"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:textColor="#fff"/>
 
     </LinearLayout>
 </RelativeLayout>
-=======
-            android:layout_height="wrap_content" />
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
->>>>>>> master
