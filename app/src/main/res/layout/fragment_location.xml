@@ -33,7 +33,7 @@
         android:id="@+id/location_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_below="@id/contactProfilePic"
         android:layout_margin="0.5dp"/>
 </RelativeLayout>
