@@ -1,12 +1,16 @@
 package msc.oulu.fi.familink;
 
-import android.app.FragmentManager;
+import com.google.android.gms.maps.MapFragment;
+
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.Snackbar;
+import android.app.FragmentManager;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +20,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 
 public class LocationFragment extends Fragment implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private OnFragmentInteractionListener mListener;
-    private SupportMapFragment fragment;
+    private MapFragment fragment;
     private GoogleMap gMap;
     GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -51,7 +53,6 @@ public class LocationFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initilizeMap();
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
@@ -59,34 +60,44 @@ public class LocationFragment extends Fragment implements
                     .addApi(LocationServices.API)
                     .build();
         }
-        if(mLastLocation!=null){
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat,lastLong), 10));
-        }
     }
 
-    private void initilizeMap() {
-        if (gMap == null) {
-            FragmentManager fm = getChildFragmentManager();
-            fragment = (SupportMapFragment) fm.findFragmentById(R.id.location_map);
-            gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-            // check if map is created successfully or not
-            if (gMap == null) {
-                Snackbar.make(null,"Maps could not be created",Snackbar.LENGTH_LONG).show();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentManager fm = getChildFragmentManager();
+        fragment = (MapFragment) fm.findFragmentById(R.id.location_map);
+        fragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
             }
+        });
+
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
-        //		setupMap(pin);
+        gMap = googleMap;
+        gMap.setMyLocationEnabled(true);
+        if (mLastLocation != null) {
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 10));
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_location,container,false);
+        return inflater.inflate(R.layout.fragment_location, container, false);
     }
 
     public void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     public void onStop() {
@@ -114,6 +125,11 @@ public class LocationFragment extends Fragment implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             lastLat = mLastLocation.getLatitude();
