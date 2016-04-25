@@ -25,10 +25,12 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@raw/plus"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="15dp"
         android:id="@+id/notesAdd"
-        android:elevation="2dp"/>
+        android:elevation="2dp"
+        android:borderWidth="0dp"
+        android:fabSize="normal"/>
 </RelativeLayout>

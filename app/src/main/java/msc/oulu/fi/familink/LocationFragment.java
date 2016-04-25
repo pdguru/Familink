@@ -83,6 +83,7 @@ public class LocationFragment extends Fragment implements
         }
         gMap = googleMap;
         gMap.setMyLocationEnabled(true);
+        getLastKnownLocation();
         if (mLastLocation != null) {
             gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 10));
         }
@@ -125,7 +126,10 @@ public class LocationFragment extends Fragment implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        getLastKnownLocation();
+    }
 
+    private void getLastKnownLocation() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
