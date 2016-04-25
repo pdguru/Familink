@@ -1,11 +1,11 @@
 package msc.oulu.fi.familink;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +16,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 
 public class LocationFragment extends Fragment implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private OnFragmentInteractionListener mListener;
     private SupportMapFragment fragment;
@@ -59,8 +57,8 @@ public class LocationFragment extends Fragment implements
                     .addApi(LocationServices.API)
                     .build();
         }
-        if(mLastLocation!=null){
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat,lastLong), 10));
+        if (mLastLocation != null) {
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 10));
         }
     }
 
@@ -72,7 +70,7 @@ public class LocationFragment extends Fragment implements
 
             // check if map is created successfully or not
             if (gMap == null) {
-                Snackbar.make(null,"Maps could not be created",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(null, "Maps could not be created", Snackbar.LENGTH_LONG).show();
             }
         }
         //		setupMap(pin);
@@ -81,7 +79,7 @@ public class LocationFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_location,container,false);
+        return inflater.inflate(R.layout.fragment_location, container, false);
     }
 
     public void onStart() {

@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -20,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +39,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.quickblox.auth.QBAuth;
+import com.quickblox.auth.model.QBSession;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +57,8 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    private final static String TAG = LoginActivity.class.getSimpleName();
+
     SharedPreferences sharedPreferences;
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -57,22 +66,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
     // Facebook-related resources
-    private LoginManager loginManager;
+    private LoginManager mLoginManager;
     private Collection<String> readPermissions = Arrays.asList("");
-    private AccessToken accessToken;
-    private CallbackManager callbackManager;
+    private AccessToken mAccessToken;
+    private CallbackManager mCallbackManager;
+
+    private QBUser user;
+
+    private String email;
+    private String password;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -104,22 +111,45 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        loginManager = LoginManager.getInstance();
-        callbackManager = CallbackManager.Factory.create();
-        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        mLoginManager = LoginManager.getInstance();
+        mCallbackManager = CallbackManager.Factory.create();
+        mLoginManager.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 //TODO
+                Log.d(TAG, "Login to Facebook successful");
+
+//                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT);
+
+                mAccessToken = loginResult.getAccessToken();
+                user.setEmail(email);
+                user.setPassword(mAccessToken.getToken());
+
+                QBAuth.createSession(user, new QBEntityCallback<QBSession>() {
+                    @Override
+                    public void onSuccess(QBSession qbSession, Bundle bundle) {
+                        Log.d(TAG, "Session successfully created");
+                        user.setId(qbSession.getUserId());
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                        Log.d(TAG, "Session could not be created " + e.getLocalizedMessage());
+                    }
+                });
             }
 
             @Override
             public void onCancel() {
                 //TODO
+                Log.d(TAG, "Login cancelled");
             }
 
             @Override
             public void onError(FacebookException error) {
                 //TODO
+                Log.d(TAG, "Login ended with error" + error.getLocalizedMessage());
+
             }
         });
 
@@ -194,8 +224,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        email = mEmailView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -226,6 +256,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -320,6 +352,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public QBUser getUser() {
+        return user;
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -352,22 +393,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 sharedPreferences = getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("user",mEmail);
-                editor.putString("pass",mPassword);
+                editor.putString("user", mEmail);
+                editor.putString("pass", mPassword);
                 editor.commit();
             } catch (Exception e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
-            // TODO: register the new account here.
+            mLoginManager.logInWithReadPermissions(getParent(), readPermissions);
+
             return true;
         }
 
