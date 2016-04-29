@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     SharedPreferences sharedPreferences;
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
+
+        Firebase.setAndroidContext(this);
 
         String name = "John"; // this info comes from login
         ((TextView)findViewById(R.id.heiMsg)).setText("Hei, "+name);
