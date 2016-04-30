@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,13 +38,16 @@ public class NotesFragment extends Fragment{
         return fragment;
     }
 
+    RecyclerView rv;
     ArrayList<String> notesTexts;
+    NotesAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notesTexts = new ArrayList<String>();
 
-        notesTexts.add("Wash car on Sunday");
+        notesTexts.add("Change car tyres to summer tyres");
         notesTexts.add("Pay Paul 8e for pizza");
         notesTexts.add("Gym timings: Mon-Fri 6pm to 7:30pm");
     }
@@ -51,11 +55,26 @@ public class NotesFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.notes_recycler_view);
+        rv = (RecyclerView) view.findViewById(R.id.notes_recycler_view);
         GridLayoutManager llm = new GridLayoutManager(getActivity(), 2);
+
         rv.setLayoutManager(llm);
 
-        rv.setAdapter(new NotesAdapter(notesTexts));
+        adapter = new NotesAdapter((notesTexts));
+        rv.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.notesAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewNote();
+            }
+        });
+    }
+
+    private void addNewNote() {
+        notesTexts.add("");
+        adapter.notifyItemInserted(notesTexts.size());
     }
 
     @Override

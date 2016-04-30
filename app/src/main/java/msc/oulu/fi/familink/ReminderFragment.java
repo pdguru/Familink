@@ -4,9 +4,14 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 /**
  * Created by pramodguruprasad on 18/04/16.
@@ -31,10 +36,36 @@ public class ReminderFragment extends Fragment {
         return fragment;
     }
 
+    RecyclerView rv;
+    ArrayList<String> reminders;
+    ReminderAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        reminders = new ArrayList<String>();
+        reminders.add("Go die");
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rv = (RecyclerView) view.findViewById(R.id.reminder_recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(llm);
+
+        adapter = new ReminderAdapter(reminders);
+        rv.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.reminderAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reminders.add("");
+                adapter.notifyItemInserted(reminders.size());
+            }
+        });
     }
 
     @Override
@@ -80,5 +111,11 @@ public class ReminderFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ReminderObject {
+        String text;
+        boolean checkedOff;
+        String addedBy;
     }
 }
