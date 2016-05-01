@@ -43,6 +43,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import msc.oulu.fi.familink.utils.FirebaseHelper;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -73,7 +75,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
     private View mLoginFormView;
     private Button mLoginButton;
 
@@ -110,6 +111,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 attemptLogin();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // end application
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     private void populateAutoComplete() {
@@ -309,6 +318,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Log.d(TAG, "Facebook login successful");
 
                         AccessToken.setCurrentAccessToken(loginResult.getAccessToken());
+                        FirebaseHelper.onFacebookAccessTokenChange(loginResult.getAccessToken());
                     }
 
                     @Override
