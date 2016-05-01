@@ -14,7 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+
+import msc.oulu.fi.familink.chat.ChatFragment;
 
 public class NavigationRootActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

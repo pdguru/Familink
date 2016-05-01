@@ -31,19 +31,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.quickblox.auth.QBAuth;
-import com.quickblox.auth.model.QBSession;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,10 +68,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // Facebook-related resources
     private LoginManager mLoginManager;
     private Collection<String> readPermissions = Arrays.asList("");
-    private AccessToken mAccessToken;
     private CallbackManager mCallbackManager;
-
-    private QBUser user;
 
     private String email;
     private String password;
@@ -118,25 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onSuccess(LoginResult loginResult) {
                 //TODO
                 Log.d(TAG, "Login to Facebook successful");
-
-//                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT);
-
-                mAccessToken = loginResult.getAccessToken();
-                user.setEmail(email);
-                user.setPassword(mAccessToken.getToken());
-
-                QBAuth.createSession(user, new QBEntityCallback<QBSession>() {
-                    @Override
-                    public void onSuccess(QBSession qbSession, Bundle bundle) {
-                        Log.d(TAG, "Session successfully created");
-                        user.setId(qbSession.getUserId());
-                    }
-
-                    @Override
-                    public void onError(QBResponseException e) {
-                        Log.d(TAG, "Session could not be created " + e.getLocalizedMessage());
-                    }
-                });
+                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -358,10 +332,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public QBUser getUser() {
-        return user;
-    }
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -391,7 +361,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                sharedPreferences = getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
+                //TODO make String final somewhere
+                sharedPreferences = getSharedPreferences("familinkPreference", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("user", mEmail);
                 editor.putString("pass", mPassword);
