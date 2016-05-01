@@ -1,34 +1,49 @@
 package msc.oulu.fi.familink;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LocationFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private OnFragmentInteractionListener mListener;
-    private SupportMapFragment fragment;
+    private MapFragment fragment;
     private GoogleMap gMap;
     GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private double lastLat, lastLong;
+
+    Firebase myFirebaseRef;
+    String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
 
     public LocationFragment() {
         // Required empty public constructor
@@ -49,7 +64,6 @@ public class LocationFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initilizeMap();
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
@@ -57,34 +71,57 @@ public class LocationFragment extends Fragment implements
                     .addApi(LocationServices.API)
                     .build();
         }
-        if (mLastLocation != null) {
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 10));
-        }
-    }
 
-    private void initilizeMap() {
-        if (gMap == null) {
-            FragmentManager fm = getChildFragmentManager();
-            fragment = (SupportMapFragment) fm.findFragmentById(R.id.location_map);
-            gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-            // check if map is created successfully or not
-            if (gMap == null) {
-                Snackbar.make(null, "Maps could not be created", Snackbar.LENGTH_LONG).show();
-            }
-        }
-        //		setupMap(pin);
+        myFirebaseRef = new Firebase(FIREBASE_URL);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentManager fm = getChildFragmentManager();
+        fragment = (MapFragment) fm.findFragmentById(R.id.location_map);
+        fragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
+
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        gMap = googleMap;
+        gMap.setMyLocationEnabled(true);
+
+        //get map points from firebase and move map
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("Snapshot", dataSnapshot.getValue().toString());
+                String value = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("Snapshot Failed", firebaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_location, container, false);
     }
 
     public void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     public void onStop() {
@@ -112,21 +149,48 @@ public class LocationFragment extends Fragment implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        getLastKnownLocation();
+    }
+
+    private void getLastKnownLocation() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             lastLat = mLastLocation.getLatitude();
             lastLong = mLastLocation.getLongitude();
+            Log.d("Last known location",mLastLocation.toString());
+            if (mLastLocation != null) {
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
+                //save my location to firebase
+                String mapPoint = lastLat+";"+lastLong;
+                Map<String, String> userLoc = new HashMap<String, String>();
+                userLoc.put(getUsername(),mapPoint);
+
+                myFirebaseRef.child("userLocation").setValue(userLoc);
+
+            }
         }
+        else Log.d("Last known location","Unknown");
+    }
+
+    private String getUsername() {
+         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
+        String username[] = sharedPreferences.getString("user","").split("@");
+        return username[0];
     }
 
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d("*******************","Connection suspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("*******************","Connection failed");
 
     }
 

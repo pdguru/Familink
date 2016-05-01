@@ -38,4 +38,5 @@ dependencies {
     }
     compile "com.quickblox:quickblox-android-sdk-messages:$rootProject.qbSdkVersion@aar"
     compile 'com.navercorp.pulltorefresh:library:3.2.3@aar'
+    compile 'com.firebase:firebase-client-android:2.5.2'
 }

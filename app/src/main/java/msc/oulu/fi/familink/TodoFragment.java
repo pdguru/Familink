@@ -4,9 +4,14 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 /**
  * Created by pramodguruprasad on 18/04/16.
@@ -31,10 +36,37 @@ public class TodoFragment extends Fragment {
         return fragment;
     }
 
+    RecyclerView rv;
+    ArrayList<String> todoTexts;
+    TodoAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        todoTexts = new ArrayList<String>();
+        todoTexts.add("Wash cat on sunday");
+        todoTexts.add("Laundry");
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rv = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(llm);
+
+        adapter = new TodoAdapter(todoTexts);
+        rv.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.todoAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                todoTexts.add("");
+                adapter.notifyItemInserted(todoTexts.size());
+            }
+        });
     }
 
     @Override
