@@ -1,14 +1,23 @@
 package msc.oulu.fi.familink;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by pramodguruprasad on 29/04/16.
@@ -17,7 +26,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
 
     ArrayList<String> texts;
-    public NotesAdapter(ArrayList<String> notesTexts) {
+    Context ctx;
+    public NotesAdapter(Context context, ArrayList<String> notesTexts)
+    {
+        ctx = context;
         texts = notesTexts;
     }
 
@@ -79,8 +91,37 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(NotesViewHolder holder, int position) {
+    public void onBindViewHolder(NotesViewHolder holder, final int position) {
         holder.editText.setText(texts.get(position));
+
+        holder.editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+//                Firebase myFirebaseRef = new Firebase("https://msc-familink.firebaseio.com/");
+//
+//                Firebase notesRef = myFirebaseRef.child("notes");
+//                Map<String, Object> note = new HashMap<String, Object>();
+//                note.put(getUsername(), s.toString());
+//                notesRef.updateChildren(note);
+
+            }
+        });
+    }
+
+    private String getUsername() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
+        String username[] = sharedPreferences.getString("user","").split("@");
+        return username[0];
     }
 
     /**

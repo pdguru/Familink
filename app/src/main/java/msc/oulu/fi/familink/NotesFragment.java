@@ -6,12 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -42,6 +46,8 @@ public class NotesFragment extends Fragment{
     ArrayList<String> notesTexts;
     NotesAdapter adapter;
 
+    Firebase myFirebaseRef;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +56,21 @@ public class NotesFragment extends Fragment{
         notesTexts.add("Change car tyres to summer tyres");
         notesTexts.add("Pay Paul 8e for pizza");
         notesTexts.add("Gym timings: Mon-Fri 6pm to 7:30pm");
+
+//        myFirebaseRef = new Firebase("https://msc-familink.firebaseio.com/");
+//
+//        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                notesTexts.add(dataSnapshot.child("notes").getValue().toString());
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//                Log.d("Firebase Erroe",firebaseError.getDetails());
+//            }
+//        });
+
     }
 
     @Override
@@ -60,7 +81,7 @@ public class NotesFragment extends Fragment{
 
         rv.setLayoutManager(llm);
 
-        adapter = new NotesAdapter((notesTexts));
+        adapter = new NotesAdapter(getActivity(), notesTexts);
         rv.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.notesAdd);
@@ -70,6 +91,7 @@ public class NotesFragment extends Fragment{
                 addNewNote();
             }
         });
+
     }
 
     private void addNewNote() {

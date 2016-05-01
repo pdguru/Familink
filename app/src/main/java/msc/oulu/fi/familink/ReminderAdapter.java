@@ -33,7 +33,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.reminder_cardview);
             editText = (EditText)itemView.findViewById(R.id.reminderText);
-//            checkBox = (CheckBox) itemView.findViewById(R.id.reminderCB);
+            checkBox = (CheckBox) itemView.findViewById(R.id.reminderCB);
             textView = (TextView) itemView.findViewById(R.id.reminderAddedBy);
 
         }

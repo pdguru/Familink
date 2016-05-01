@@ -19,6 +19,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.snapshot.DoubleNode;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +104,11 @@ public class LocationFragment extends Fragment implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d("Snapshot", dataSnapshot.getValue().toString());
-                String value = dataSnapshot.getValue().toString();
+                String value = dataSnapshot.child("userLocation/foo").getValue().toString();
+                String userLatLong[] = value.split(";");
+                Double userLat = Double.parseDouble(userLatLong[0]);
+                Double userLong = Double.parseDouble(userLatLong[1]);
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLat, userLong), 14));
             }
 
             @Override
@@ -163,14 +169,16 @@ public class LocationFragment extends Fragment implements
             lastLong = mLastLocation.getLongitude();
             Log.d("Last known location",mLastLocation.toString());
             if (mLastLocation != null) {
-                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
+//                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
                 //save my location to firebase
                 String mapPoint = lastLat+";"+lastLong;
                 Map<String, String> userLoc = new HashMap<String, String>();
                 userLoc.put(getUsername(),mapPoint);
 
-                myFirebaseRef.child("userLocation").setValue(userLoc);
-
+                Firebase locRef = myFirebaseRef.child("userLocation");
+                Map<String, Object> loc = new HashMap<String, Object>();
+                loc.put(getUsername(), mapPoint);
+                locRef.updateChildren(loc);
             }
         }
         else Log.d("Last known location","Unknown");

@@ -26,20 +26,22 @@
                 android:hint="Add a new reminder..."
                 android:textColor="#fff"
                 android:textColorHint="#fff"
-                android:elegantTextHeight="true" />
-            <!--<CheckBox-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_toRightOf="@id/reminderText"-->
-                <!--android:gravity="center_horizontal"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:clickable="true"-->
-                <!--android:id="@+id/reminderCB"-->
-                <!--android:layout_marginLeft="2dp"-->
-                <!--android:layout_marginRight="2dp"-->
-                <!--android:layout_marginTop="2dp"-->
-                <!--android:layout_marginBottom="2dp" />-->
+                android:elegantTextHeight="true"
+                android:clickable="true"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/reminderText"
+                android:gravity="center_horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:id="@+id/reminderCB"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:visibility="gone"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
