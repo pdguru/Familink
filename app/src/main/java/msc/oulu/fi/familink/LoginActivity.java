@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // Facebook-related resources
-    private Collection<String> readPermissions = Arrays.asList("");
+    private Collection<String> readPermissions = Arrays.asList("user_friends");
     private CallbackManager mCallbackManager;
 
     private String email;
