@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--<group android:checkableBehavior="single">-->
         <item
             android:id="@+id/nav_chat"
             android:icon="@raw/chat"
             android:title="Chat" />
         <item
             android:id="@+id/nav_notes"
-            android:src="@raw/notes"
+            android:icon="@raw/notes"
             android:title="Notes" />
         <item
             android:id="@+id/nav_todo"
-            android:src="@raw/todo"
+            android:icon="@raw/todo"
             android:title="Todo" />
         <item
             android:id="@+id/nav_location"
-            android:src="@raw/location"
+            android:icon="@raw/location"
             android:title="Location" />
         <item
             android:id="@+id/nav_reminder"
-            android:src="@raw/reminders"
+            android:icon="@raw/reminders"
             android:title="Remainder" />
         <item
             android:id="@+id/nav_settings"
-            android:src="@raw/settings"
+            android:icon="@raw/settings"
             android:title="Settings" />
-    <!--</group>-->
-
 </menu>

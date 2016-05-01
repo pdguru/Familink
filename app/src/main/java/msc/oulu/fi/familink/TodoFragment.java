@@ -37,16 +37,26 @@ public class TodoFragment extends Fragment {
     }
 
     RecyclerView rv;
-    ArrayList<String> todoTexts;
+    ArrayList<ReminderAndtodoObject> todoTexts;
     TodoAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        todoTexts = new ArrayList<String>();
-        todoTexts.add("Wash cat on sunday");
-        todoTexts.add("Laundry");
+        todoTexts = new ArrayList<ReminderAndtodoObject>();
+
+        ReminderAndtodoObject obj1 = new ReminderAndtodoObject();
+        obj1.text = "Wash cat on sunday";
+        obj1.addedBy = "Sam";
+        obj1.checked = false;
+        todoTexts.add(obj1);
+
+        ReminderAndtodoObject obj2 = new ReminderAndtodoObject();
+        obj2.text = "Laundry";
+        obj2.addedBy = "Claire";
+        obj2.checked = true;
+        todoTexts.add(obj2);
     }
 
     @Override
@@ -63,7 +73,12 @@ public class TodoFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                todoTexts.add("");
+                ReminderAndtodoObject obj = new ReminderAndtodoObject();
+                obj.text = "";
+                obj.addedBy = "You";
+                obj.checked = false;
+                todoTexts.add(obj);
+
                 adapter.notifyItemInserted(todoTexts.size());
             }
         });

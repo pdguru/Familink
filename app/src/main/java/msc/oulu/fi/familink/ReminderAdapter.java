@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder> {
 
 
-    ArrayList<String> texts;
-    public ReminderAdapter(ArrayList<String> reminderTexts) {
+    ArrayList<ReminderAndtodoObject> texts;
+    public ReminderAdapter(ArrayList<ReminderAndtodoObject> reminderTexts) {
         texts = reminderTexts;
     }
 
@@ -87,7 +87,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
      */
     @Override
     public void onBindViewHolder(ReminderViewHolder holder, int position) {
-        holder.editText.setText(texts.get(position));
+        holder.editText.setText(texts.get(position).text);
+        holder.textView.setText(texts.get(position).addedBy);
     }
 
     /**

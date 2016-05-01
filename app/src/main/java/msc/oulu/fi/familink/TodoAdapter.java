@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
 
 
-    ArrayList<String> texts;
-    public TodoAdapter(ArrayList<String> todoTexts) {
+    ArrayList<ReminderAndtodoObject> texts;
+    public TodoAdapter(ArrayList<ReminderAndtodoObject> todoTexts) {
         texts = todoTexts;
     }
 
@@ -87,7 +87,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
      */
     @Override
     public void onBindViewHolder(TodoViewHolder holder, int position) {
-        holder.editText.setText(texts.get(position));
+        holder.editText.setText(texts.get(position).text);
+        holder.checkBox.setChecked(texts.get(position).checked);
+        holder.textView.setText(texts.get(position).addedBy);
     }
 
     /**

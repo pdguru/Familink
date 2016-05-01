@@ -37,15 +37,26 @@ public class ReminderFragment extends Fragment {
     }
 
     RecyclerView rv;
-    ArrayList<String> reminders;
+    ArrayList<ReminderAndtodoObject> reminders;
     ReminderAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        reminders = new ArrayList<String>();
-        reminders.add("Go die");
+        reminders = new ArrayList<ReminderAndtodoObject>();
+
+        ReminderAndtodoObject obj1 = new ReminderAndtodoObject();
+        obj1.text = "Get milk and eggs";
+        obj1.addedBy = "Claire";
+        obj1.checked = false;
+        reminders.add(obj1);
+
+        ReminderAndtodoObject obj2 = new ReminderAndtodoObject();
+        obj2.text = "Fix kitchen sink";
+        obj2.addedBy = "Claire";
+        obj2.checked = true;
+        reminders.add(obj2);
     }
 
     @Override
@@ -62,7 +73,12 @@ public class ReminderFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reminders.add("");
+                ReminderAndtodoObject obj = new ReminderAndtodoObject();
+                obj.text = "";
+                obj.addedBy = "You";
+                obj.checked = false;
+                reminders.add(obj);
+
                 adapter.notifyItemInserted(reminders.size());
             }
         });
