@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import msc.oulu.fi.familink.TodoAndReminder.ReminderFragment;
+import msc.oulu.fi.familink.TodoAndReminder.TodoFragment;
+import msc.oulu.fi.familink.chat.ChatFragment;
 import msc.oulu.fi.familink.location.LocationFragment;
 import msc.oulu.fi.familink.notes.NotesFragment;
 
@@ -49,6 +52,7 @@ public class NavigationRootActivity extends AppCompatActivity
     }
 
     private void SetCurrentView(String section) {
+//        MainActivity.progressDialog.show();
         baseLayout.removeAllViews();
         switch (section) {
             case "Chat":
@@ -98,6 +102,7 @@ public class NavigationRootActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+//        MainActivity.progressDialog.show(this,"","Loading...");
         baseLayout.removeAllViews();
         switch (id) {
             case R.id.nav_chat:
@@ -136,6 +141,7 @@ public class NavigationRootActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+//        MainActivity.progressDialog.cancel();
         return true;
     }
 }

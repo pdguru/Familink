@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.TodoAndReminder;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import msc.oulu.fi.familink.R;
 
 /**
  * Created by pramodguruprasad on 30/04/16.

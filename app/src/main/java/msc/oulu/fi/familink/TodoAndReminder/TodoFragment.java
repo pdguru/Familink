@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.TodoAndReminder;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import msc.oulu.fi.familink.MainActivity;
+import msc.oulu.fi.familink.R;
 
 /**
  * Created by pramodguruprasad on 18/04/16.
@@ -62,6 +65,7 @@ public class TodoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         rv = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);

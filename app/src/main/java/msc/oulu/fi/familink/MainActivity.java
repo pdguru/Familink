@@ -1,5 +1,6 @@
 package msc.oulu.fi.familink;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String FAMILINK_PREFERENCES = "familink_preferences";
 
+    ProgressDialog progressDialog;
+
     SharedPreferences mSharedPreferences;
     private String mUsername = "Unknown";
     private String mUserPictureURL;
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSharedPreferences = getSharedPreferences(FAMILINK_PREFERENCES, Context.MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+
+        progressDialog = new ProgressDialog(this);
 
         getLogin();
 
@@ -52,9 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
+        progressDialog.cancel();
+    }
 
+    @Override
+    protected void onResume() {
+        progressDialog.cancel();
         if (AccessToken.getCurrentAccessToken() == null) {
             getLogin();
         }
@@ -63,7 +74,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setUserName(mUsername);
 
         mUserPictureURL = mSharedPreferences.getString(LoginActivity.PROFILE_PICTURE, null);
-        // TODO set picture in image view to profile picture
+        if (mUserPictureURL != null) {
+            //TODO load picture into user pic ImageView
+        }
+
+        super.onResume();
     }
 
     @Override
@@ -81,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        progressDialog.show(this,"","Loading...");
         switch (v.getId()) {
             case R.id.chatRL:
                 Intent chatIntent = new Intent(MainActivity.this, NavigationRootActivity.class);
@@ -113,5 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(settingIntent);
                 break;
         }
+        progressDialog.cancel();
     }
 }
