@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -46,6 +47,7 @@ public class LocationFragment extends Fragment implements
 
     Firebase myFirebaseRef;
     String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
+    private ValueEventListener mConnectedListener;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -104,11 +106,11 @@ public class LocationFragment extends Fragment implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d("Snapshot", dataSnapshot.getValue().toString());
-                String value = dataSnapshot.child("userLocation/foo").getValue().toString();
-                String userLatLong[] = value.split(";");
-                Double userLat = Double.parseDouble(userLatLong[0]);
-                Double userLong = Double.parseDouble(userLatLong[1]);
-                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLat, userLong), 14));
+//                String value = dataSnapshot.child("userLocation").getChildren().getValue().toString();
+//                String userLatLong[] = value.split(";");
+//                Double userLat = Double.parseDouble(userLatLong[0]);
+//                Double userLong = Double.parseDouble(userLatLong[1]);
+//                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLat, userLong), 14));
             }
 
             @Override
@@ -172,22 +174,48 @@ public class LocationFragment extends Fragment implements
 //                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
                 //save my location to firebase
                 String mapPoint = lastLat+";"+lastLong;
-                Map<String, String> userLoc = new HashMap<String, String>();
-                userLoc.put(getUsername(),mapPoint);
+//                Map<String, String> userLoc = new HashMap<String, String>();
+////                userLoc.put(getUsername(),mapPoint);
+//
+//                Firebase locRef = myFirebaseRef.child("userLocation");
+//                Map<String, Object> loc = new HashMap<String, Object>();
+//                loc.put(getUsername(), mapPoint);
+//                locRef.updateChildren(loc);
 
-                Firebase locRef = myFirebaseRef.child("userLocation");
-                Map<String, Object> loc = new HashMap<String, Object>();
-                loc.put(getUsername(), mapPoint);
-                locRef.updateChildren(loc);
+                putOnFirebase(mapPoint);
             }
         }
         else Log.d("Last known location","Unknown");
     }
 
+    private void putOnFirebase(String mapPoint) {
+        mConnectedListener = myFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean connected = (Boolean) dataSnapshot.getValue();
+                if (connected) {
+                    Toast.makeText(getActivity(), "Connected to Firebase", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        myFirebaseRef.push().setValue(mapPoint);
+
+    }
+
     private String getUsername() {
-         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
-        String username[] = sharedPreferences.getString("user","").split("@");
-        return username[0];
+         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MainActivity.FAMILINK_PREFERENCES, Context.MODE_PRIVATE);
+//        String username[] = sharedPreferences.getString("email","").split("@");
+//        return username[0];
+
+        return sharedPreferences.getString("email","");
     }
 
 

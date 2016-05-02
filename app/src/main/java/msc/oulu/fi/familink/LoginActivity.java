@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private final static String TAG = LoginActivity.class.getSimpleName();
 
     public static final String EMAIL = "email";
-    public static final String USERNAME = "user";
+    public static final String USERNAME = "name";
     public static final String FRIEND_ID = "id";
     public static final String FRIEND_NAME = "name";
     public static final String FRIENDS = "friends";
