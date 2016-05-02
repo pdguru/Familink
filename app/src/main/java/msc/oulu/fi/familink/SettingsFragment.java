@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.login.LoginManager;
+
 /**
  * Created by pramodguruprasad on 18/04/16.
  */
@@ -50,6 +52,14 @@ public class SettingsFragment extends Fragment{
             public void onClick(View v) {
                 Intent addMembers = new Intent(getActivity(), SettingsAddMembers.class);
                 getActivity().startActivity(addMembers);
+            }
+        });
+        view.findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut();
+                Intent goToMain = new Intent(getActivity(), MainActivity.class);
+                getActivity().startActivity(goToMain);
             }
         });
     }

@@ -3,6 +3,7 @@ package msc.oulu.fi.familink.chat;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -27,14 +28,23 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
         TextView textAuthor = (TextView) view.findViewById(R.id.textAuthor);
-        textAuthor.setText(author + ": ");
+        textAuthor.setText(author);
+
+        TextView textChat = (TextView) view.findViewById(R.id.textChat);
+        textChat.setText(chat.getMessage());
+
+        ImageView authorImage = (ImageView) view.findViewById(R.id.userPic);
+
+        ((TextView) view.findViewById(R.id.textTime)).setText(chat.getDate().toString());
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
             textAuthor.setTextColor(Color.RED);
+            textChat.setTextColor(Color.RED);
+// TODO set image correctly
+// authorImage.setImage(R.raw.user);
         } else {
             textAuthor.setTextColor(Color.BLUE);
+            textChat.setTextColor(Color.BLUE);
         }
-        ((TextView) view.findViewById(R.id.textChat)).setText(chat.getMessage());
-        ((TextView) view.findViewById(R.id.textTime)).setText(chat.getDate().toString());
     }
 }

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
@@ -20,25 +22,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TAG = MainActivity.class.getSimpleName();
     protected static final String FAMILINK_PREFERENCES = "familink_preferences";
 
-    SharedPreferences sharedPreferences;
-    private String username = "";
+    SharedPreferences mSharedPreferences;
+    private String mUsername = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getSharedPreferences(FAMILINK_PREFERENCES, Context.MODE_PRIVATE);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        Firebase.setAndroidContext(this);
+
+        mSharedPreferences = getSharedPreferences(FAMILINK_PREFERENCES, Context.MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
-
-        Firebase.setAndroidContext(this);
-        if (savedInstanceState != null) {
-            username = savedInstanceState.getString(LoginActivity.USERNAME);
-        }
-        String name = username.equals("") ? "Unknown" : username; // this info comes from login
-        setUserName(name);
+        getLogin();
 
         ((RelativeLayout) findViewById(R.id.chatRL)).setOnClickListener(this);
         ((RelativeLayout) findViewById(R.id.notesRL)).setOnClickListener(this);
@@ -48,17 +45,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((RelativeLayout) findViewById(R.id.settingsRL)).setOnClickListener(this);
     }
 
+    private void getLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+    }
+
     @Override
     protected void onResume() {
-        setUserName(sharedPreferences.getString(LoginActivity.USERNAME, ""));
+        if (AccessToken.getCurrentAccessToken() == null) {
+            getLogin();
+        }
+
+        String name = mUsername.equals("") ? "Unknown" : mUsername; // this info comes from login
+        setUserName(name);
         super.onResume();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(LoginActivity.USERNAME, sharedPreferences.getString(LoginActivity.USERNAME, ""));
-        outState.putString(LoginActivity.EMAIL, sharedPreferences.getString(LoginActivity.EMAIL, ""));
-        outState.putStringArrayList(LoginActivity.FRIENDS, new ArrayList<>((sharedPreferences.getStringSet(LoginActivity.FRIENDS, new HashSet<String>()))));
+        outState.putString(LoginActivity.USERNAME, mSharedPreferences.getString(LoginActivity.USERNAME, ""));
+        outState.putString(LoginActivity.EMAIL, mSharedPreferences.getString(LoginActivity.EMAIL, ""));
+        outState.putStringArrayList(LoginActivity.FRIENDS, new ArrayList<>((mSharedPreferences.getStringSet(LoginActivity.FRIENDS, new HashSet<String>()))));
 
         super.onSaveInstanceState(outState);
     }
