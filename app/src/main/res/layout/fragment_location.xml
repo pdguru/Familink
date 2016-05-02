@@ -36,7 +36,8 @@
         android:text="Last seen here at"
         android:textColor="@color/colorPrimary"
         android:textSize="14dp"
-        android:layout_alignLeft="@id/locCallButton"/>
+        android:layout_alignLeft="@id/locCallButton"
+        android:id="@+id/locDate" />
     <fragment
         android:id="@+id/location_map"
         android:layout_width="match_parent"

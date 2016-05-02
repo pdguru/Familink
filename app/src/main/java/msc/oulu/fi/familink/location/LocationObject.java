@@ -17,6 +17,17 @@ public class LocationObject {
         this.date = date;
     }
 
+    public LocationObject(String username, Double lat, Date date, double lng) {
+        this.username = username;
+        latitude = lat;
+        longitude = lng;
+        this.date = date;
+    }
+
+    public LocationObject(){
+        //for the joy of Firebase
+    }
+
     public String getUsername() {
         return username;
     }
