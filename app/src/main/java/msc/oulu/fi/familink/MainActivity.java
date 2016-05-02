@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
+        super.onResume();
+
         if (AccessToken.getCurrentAccessToken() == null) {
             getLogin();
         }
@@ -61,11 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setUserName(mUsername);
 
         mUserPictureURL = mSharedPreferences.getString(LoginActivity.PROFILE_PICTURE, null);
-        if (mUserPictureURL != null) {
-            //TODO load picture into user pic ImageView
-        }
-
-        super.onResume();
+        // TODO set picture in image view to profile picture
     }
 
     @Override
