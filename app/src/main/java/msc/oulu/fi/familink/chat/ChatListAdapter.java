@@ -1,6 +1,6 @@
 package msc.oulu.fi.familink.chat;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
@@ -17,8 +17,8 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 
     private String mUsername;
 
-    public ChatListAdapter(Query ref, Fragment fragment, int layout, String mUsername) {
-        super(ref, Chat.class, layout, fragment.getActivity());
+    public ChatListAdapter(Query ref, Activity activity, int layout, String mUsername) {
+        super(ref, Chat.class, layout, activity);
         this.mUsername = mUsername;
     }
 
@@ -35,5 +35,6 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
             textAuthor.setTextColor(Color.BLUE);
         }
         ((TextView) view.findViewById(R.id.textChat)).setText(chat.getMessage());
+        ((TextView) view.findViewById(R.id.textTime)).setText(chat.getDate().toString());
     }
 }
