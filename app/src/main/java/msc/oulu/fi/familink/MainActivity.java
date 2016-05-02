@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         outState.putString(LoginActivity.USERNAME, sharedPreferences.getString(LoginActivity.USERNAME, ""));
         outState.putString(LoginActivity.EMAIL, sharedPreferences.getString(LoginActivity.EMAIL, ""));
         outState.putStringArrayList(LoginActivity.FRIENDS, new ArrayList<>((sharedPreferences.getStringSet(LoginActivity.FRIENDS, new HashSet<String>()))));

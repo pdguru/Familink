@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String FRIEND_ID = "id";
     public static final String FRIEND_NAME = "name";
     public static final String FRIENDS = "friends";
+    public static final String ACCESS_TOKEN = "access_token";
 
     SharedPreferences mSharedPreferences;
 
@@ -50,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        //TODO correct position for this check?
+        if (savedInstanceState != null) {
+            AccessToken.setCurrentAccessToken((AccessToken) savedInstanceState.get(ACCESS_TOKEN));
+        }
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()) {
             finish();
         }
@@ -60,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         mCallbackManager = CallbackManager.Factory.create();
         mLoginButton = (LoginButton) findViewById(R.id.login_button);
 
-        if (mLoginButton.getText().equals(R.string.com_facebook_loginview_log_out_button)) {
+        if (mLoginButton.getText().equals(getString(R.string.com_facebook_loginview_log_out_button))) {
             finish();
         }
 
@@ -88,6 +91,9 @@ public class LoginActivity extends AppCompatActivity {
                                     mName = (String) object.get(USERNAME);
                                     editor.putString(EMAIL, mEmail);
                                     editor.putString(USERNAME, mName);
+
+                                    Log.d(TAG, EMAIL + " is " + mEmail);
+                                    Log.d(TAG, USERNAME + " is " + mName);
 
                                     editor.apply();
                                 } catch (JSONException e) {
@@ -143,7 +149,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mSharedPreferences = getSharedPreferences("familinkPreference", Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(MainActivity.FAMILINK_PREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(ACCESS_TOKEN, AccessToken.getCurrentAccessToken());
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
