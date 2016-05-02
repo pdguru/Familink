@@ -136,21 +136,27 @@ public class LoginActivity extends AppCompatActivity {
                 new GraphRequest.GraphJSONArrayCallback() {
                     @Override
                     public void onCompleted(JSONArray array, GraphResponse response) {
-                        for (int i = 0; i < array.length(); i++) {
-                            Set<String> friends = new HashSet<String>();
+                        Set<String> friends = new HashSet<String>();
 
+                        for (int i = 0; i < array.length(); i++) {
                             try {
                                 JSONObject friend = array.getJSONObject(i);
                                 String mFriendId = friend.getString(FRIEND_ID);
                                 String mFriendName = friend.getString(FRIEND_NAME);
+
+                                Log.d(TAG, FRIEND_ID + ": " + mFriendId);
+                                Log.d(TAG, FRIEND_NAME + ": " + mFriendName);
 
                                 friends.add(mFriendId + "/" + mFriendName);
 
                             } catch (JSONException e) {
                                 Log.e(TAG, e.getLocalizedMessage());
                             }
-                            editor.putStringSet(FRIENDS, friends);
+
                         }
+                        Log.d(TAG, "# of friends: " + friends.size());
+                        editor.putStringSet(FRIENDS, friends);
+                        editor.apply();
                     }
                 });
         parameters = new Bundle();
