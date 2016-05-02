@@ -23,20 +23,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:cardview-v7:23.2.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.google.android.gms:play-services-location:8.4.0'
+//    compile 'com.android.support:support-v4:23.2.1'
+//    compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile "com.quickblox:quickblox-android-sdk-core:$rootProject.qbSdkVersion@aar"
-    compile("com.quickblox:quickblox-android-sdk-chat:$rootProject.qbSdkVersion@aar") {
-        transitive=true
-    }
-    compile "com.quickblox:quickblox-android-sdk-messages:$rootProject.qbSdkVersion@aar"
-    compile 'com.navercorp.pulltorefresh:library:3.2.3@aar'
     compile 'com.firebase:firebase-client-android:2.5.2'
 }

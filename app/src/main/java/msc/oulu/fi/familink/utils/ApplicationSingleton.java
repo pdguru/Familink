@@ -5,7 +5,7 @@ package msc.oulu.fi.familink.utils;
  */
 public class ApplicationSingleton {
 
-    private static final String TAG = ApplicationSingleton.class.getSimpleName();
+    public static final String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
 
     public static final String APP_ID = "39717";
     public static final String AUTH_KEY = "xLam8PXaBgSMpt3";

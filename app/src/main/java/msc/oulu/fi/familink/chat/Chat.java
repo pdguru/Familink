@@ -15,9 +15,10 @@ public class Chat {
     private Chat() {
     }
 
-    public Chat(String message, String author) {
+    public Chat(String message, String author, Date date) {
         this.message = message;
         this.author = author;
+        this.date = date;
     }
 
     public String getMessage() {
@@ -26,5 +27,9 @@ public class Chat {
 
     public String getAuthor() {
         return author;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }
