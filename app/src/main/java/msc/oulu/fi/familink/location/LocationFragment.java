@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.location;
 
 import android.Manifest;
 import android.app.Fragment;
@@ -9,17 +9,19 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.snapshot.DoubleNode;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -28,10 +30,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
+
+import msc.oulu.fi.familink.MainActivity;
+import msc.oulu.fi.familink.R;
+import msc.oulu.fi.familink.chat.Chat;
 
 
 public class LocationFragment extends Fragment implements
@@ -46,6 +50,7 @@ public class LocationFragment extends Fragment implements
 
     Firebase myFirebaseRef;
     String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
+    private ValueEventListener mConnectedListener;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -100,20 +105,35 @@ public class LocationFragment extends Fragment implements
         gMap.setMyLocationEnabled(true);
 
         //get map points from firebase and move map
-        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+        myFirebaseRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("Snapshot", dataSnapshot.getValue().toString());
-                String value = dataSnapshot.child("userLocation/foo").getValue().toString();
-                String userLatLong[] = value.split(";");
-                Double userLat = Double.parseDouble(userLatLong[0]);
-                Double userLong = Double.parseDouble(userLatLong[1]);
-                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLat, userLong), 14));
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.child("/userLocation").exists()){
+//                    if(dataSnapshot.child("/userLocation/username").getValue().toString().equalsIgnoreCase("john")){
+                        Log.d("keys",dataSnapshot.child("/userlocation").getKey());
+                        Log.d("values", dataSnapshot.child("/userLocation").getValue().toString());
+//                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.d("Snapshot Failed", firebaseError.getMessage());
+
             }
         });
     }
@@ -131,8 +151,8 @@ public class LocationFragment extends Fragment implements
     }
 
     public void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
 
@@ -169,25 +189,46 @@ public class LocationFragment extends Fragment implements
             lastLong = mLastLocation.getLongitude();
             Log.d("Last known location",mLastLocation.toString());
             if (mLastLocation != null) {
-//                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLat, lastLong), 14));
                 //save my location to firebase
-                String mapPoint = lastLat+";"+lastLong;
-                Map<String, String> userLoc = new HashMap<String, String>();
-                userLoc.put(getUsername(),mapPoint);
-
-                Firebase locRef = myFirebaseRef.child("userLocation");
-                Map<String, Object> loc = new HashMap<String, Object>();
-                loc.put(getUsername(), mapPoint);
-                locRef.updateChildren(loc);
+                putOnFirebase(lastLat,lastLong);
             }
         }
         else Log.d("Last known location","Unknown");
     }
 
-    private String getUsername() {
-         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("familinkPrefernce", Context.MODE_PRIVATE);
-        String username[] = sharedPreferences.getString("user","").split("@");
-        return username[0];
+    private void putOnFirebase(Double lat, double lng) {
+        mConnectedListener = myFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean connected = (Boolean) dataSnapshot.getValue();
+                if (connected) {
+                    Toast.makeText(getActivity(), "Connected to Firebase", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        LocationObject obj = new LocationObject(getUserEmail(), lat, lng, new Date(System.currentTimeMillis()/1000L));
+        // Create a new, auto-generated child of that chat location, and save our chat data there
+//        Log.d(TAG, "Pushed message '" + input + "' by " + mUsername);
+//        myFirebaseRef.push().setValue(obj);
+        myFirebaseRef.child("/userLocation").child(getUserEmail()).setValue(obj);
+
+    }
+
+    private String getUserEmail() {
+         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("familink_preferences", Context.MODE_PRIVATE);
+//        String username[] = sharedPreferences.getString("email","").split("@");
+//        return username[0];
+
+        return sharedPreferences.getString("email","");
     }
 
 

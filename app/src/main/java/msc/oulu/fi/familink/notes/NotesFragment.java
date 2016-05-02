@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.notes;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,17 +7,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+
+import msc.oulu.fi.familink.R;
 
 /**
  * Created by pramodguruprasad on 18/04/16.

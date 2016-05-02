@@ -1,6 +1,5 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.notes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
@@ -13,11 +12,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.firebase.client.Firebase;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import msc.oulu.fi.familink.R;
 
 /**
  * Created by pramodguruprasad on 29/04/16.
