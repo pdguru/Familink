@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.facebook.login.LoginManager;
 
+import msc.oulu.fi.familink.friends.SettingsAddMembers;
+
 /**
  * Created by pramodguruprasad on 18/04/16.
  */

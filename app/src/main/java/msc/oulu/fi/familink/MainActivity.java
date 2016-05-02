@@ -20,7 +20,7 @@ import java.util.HashSet;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    protected static final String FAMILINK_PREFERENCES = "familink_preferences";
+    public static final String FAMILINK_PREFERENCES = "familink_preferences";
 
     SharedPreferences mSharedPreferences;
     private String mUsername = "Unknown";

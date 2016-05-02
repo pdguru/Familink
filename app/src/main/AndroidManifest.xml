@@ -37,7 +37,7 @@
             android:label="@string/title_activity_login" />
 
         <activity
-            android:name=".SettingsAddMembers"
+            android:name=".friends.SettingsAddMembers"
             android:label="Add members" />
         <activity
             android:name=".NavigationRootActivity"
