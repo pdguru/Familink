@@ -7,7 +7,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in with Facebook</string>
+    <string name="action_sign_in">Sign in / Sign up</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -23,4 +23,5 @@
     <string name="action_settings">Settings</string>
     <string name="chat_hint">Type message here...</string>
     <string name="send_button_text">Send</string>
+    <string name="title_activity_login_activity_stud">Sign in</string>
 </resources>
