@@ -10,13 +10,15 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,10 +41,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import msc.oulu.fi.familink.ChatFragment;
 import msc.oulu.fi.familink.MainActivity;
+import msc.oulu.fi.familink.chat.ChatFragment;
 import msc.oulu.fi.familink.R;
-import msc.oulu.fi.familink.chat.Chat;
 
 
 public class LocationFragment extends Fragment implements
@@ -55,6 +57,7 @@ public class LocationFragment extends Fragment implements
     private double lastLat, lastLong;
 
     TextView dateTV;
+    ImageView profilePic;
 
     Firebase myFirebaseRef;
     String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
@@ -105,7 +108,7 @@ public class LocationFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         dateTV = (TextView) view.findViewById(R.id.locDate);
@@ -123,6 +126,24 @@ public class LocationFragment extends Fragment implements
             public void onClick(View v) {
                 Fragment chatFragment = ChatFragment.getInstance();
                 getFragmentManager().beginTransaction().replace(R.id.navigationRootRL, chatFragment) .commit();
+            }
+        });
+
+        profilePic = (ImageView) view.findViewById(R.id.contactProfilePic);
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(getActivity(),v);
+                popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Simon Stemper" );
+                popupMenu.show();
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Log.d("item id",""+item.getItemId());
+                        return false;
+                    }
+                });
             }
         });
     }

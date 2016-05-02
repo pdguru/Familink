@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.TodoAndReminder;
 
 /**
  * Created by pramodguruprasad on 01/05/16.

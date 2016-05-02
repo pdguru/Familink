@@ -1,4 +1,4 @@
-package msc.oulu.fi.familink;
+package msc.oulu.fi.familink.chat;
 
 import android.app.Fragment;
 import android.app.ListFragment;
@@ -25,8 +25,9 @@ import com.firebase.client.ValueEventListener;
 import java.util.Date;
 import java.util.Random;
 
-import msc.oulu.fi.familink.chat.Chat;
-import msc.oulu.fi.familink.chat.ChatListAdapter;
+import msc.oulu.fi.familink.LoginActivity;
+import msc.oulu.fi.familink.MainActivity;
+import msc.oulu.fi.familink.R;
 import msc.oulu.fi.familink.utils.FirebaseHelper;
 
 
@@ -76,7 +77,6 @@ public class ChatFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setListViewAdapter();
     }
 
@@ -129,7 +129,7 @@ public class ChatFragment extends ListFragment {
         if (mUsername == null) {
             Random r = new Random();
             // Assign a random user name if we don't have one saved.
-            mUsername = "JavaUser" + r.nextInt(100000);
+            mUsername = "FamilinkUser" + r.nextInt(100000);
             mSharedPreferences.edit().putString("username", mUsername).commit();
         }
 

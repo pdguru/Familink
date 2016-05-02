@@ -2,19 +2,26 @@ package msc.oulu.fi.familink.notes;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
+import msc.oulu.fi.familink.LoginActivity;
+import msc.oulu.fi.familink.MainActivity;
 import msc.oulu.fi.familink.R;
 
 /**
@@ -55,25 +62,32 @@ public class NotesFragment extends Fragment{
         notesTexts.add("Pay Paul 8e for pizza");
         notesTexts.add("Gym timings: Mon-Fri 6pm to 7:30pm");
 
-//        myFirebaseRef = new Firebase("https://msc-familink.firebaseio.com/");
-//
-//        myFirebaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                notesTexts.add(dataSnapshot.child("notes").getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//                Log.d("Firebase Erroe",firebaseError.getDetails());
-//            }
-//        });
+        myFirebaseRef = new Firebase("https://msc-familink.firebaseio.com/"+getUserName()+"/Notes");
 
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                notesTexts.add(dataSnapshot.child("notes").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("Firebase Erroe",firebaseError.getDetails());
+            }
+        });
+
+    }
+
+    private String getUserName() {
+        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(MainActivity.FAMILINK_PREFERENCES, 0);
+        String mUsername = mSharedPreferences.getString(LoginActivity.USERNAME, "unknown");
+        return mUsername.contains(" ") ? mUsername.substring(0, mUsername.indexOf(" ")) : mUsername;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         rv = (RecyclerView) view.findViewById(R.id.notes_recycler_view);
         GridLayoutManager llm = new GridLayoutManager(getActivity(), 2);
 
