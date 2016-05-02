@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     SharedPreferences mSharedPreferences;
     private String mUsername = "Unknown";
+    private String mUserPictureURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mUsername = mSharedPreferences.getString(LoginActivity.USERNAME, mUsername);
         setUserName(mUsername);
+
+        mUserPictureURL = mSharedPreferences.getString(LoginActivity.PROFILE_PICTURE, null);
+        if (mUserPictureURL != null) {
+            //TODO load picture into user pic ImageView
+        }
+
         super.onResume();
     }
 

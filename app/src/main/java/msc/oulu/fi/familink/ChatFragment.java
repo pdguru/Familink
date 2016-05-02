@@ -125,6 +125,7 @@ public class ChatFragment extends ListFragment {
     private void setupUsername() {
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(MainActivity.FAMILINK_PREFERENCES, 0);
         mUsername = mSharedPreferences.getString(LoginActivity.USERNAME, "unknown");
+        mUsername = mUsername.contains(" ") ? mUsername.substring(0, mUsername.indexOf(" ")) : mUsername;
         if (mUsername == null) {
             Random r = new Random();
             // Assign a random user name if we don't have one saved.
