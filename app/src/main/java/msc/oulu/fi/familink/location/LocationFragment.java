@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -30,9 +33,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import msc.oulu.fi.familink.ChatFragment;
 import msc.oulu.fi.familink.MainActivity;
 import msc.oulu.fi.familink.R;
 import msc.oulu.fi.familink.chat.Chat;
@@ -47,6 +53,8 @@ public class LocationFragment extends Fragment implements
     GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private double lastLat, lastLong;
+
+    TextView dateTV;
 
     Firebase myFirebaseRef;
     String FIREBASE_URL = "https://msc-familink.firebaseio.com/";
@@ -96,6 +104,29 @@ public class LocationFragment extends Fragment implements
 
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        dateTV = (TextView) view.findViewById(R.id.locDate);
+        view.findViewById(R.id.locCallButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:+918951821648"));
+                startActivity(callIntent);
+            }
+        });
+
+        view.findViewById(R.id.locMsgButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment chatFragment = ChatFragment.getInstance();
+                getFragmentManager().beginTransaction().replace(R.id.navigationRootRL, chatFragment) .commit();
+            }
+        });
+    }
+
     private void setupMap(GoogleMap googleMap) {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -113,11 +144,23 @@ public class LocationFragment extends Fragment implements
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.child("/userLocation").exists()){
-//                    if(dataSnapshot.child("/userLocation/username").getValue().toString().equalsIgnoreCase("john")){
-                        Log.d("keys",dataSnapshot.child("/userlocation").getKey());
-                        Log.d("values", dataSnapshot.child("/userLocation").getValue().toString());
-//                    }
+                System.out.println("There are " + dataSnapshot.getChildrenCount() + " data");
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+//                    Log.d("snapshot",dataSnapshot.child("Simon Stemper").getValue().toString());
+                    LocationObject locObj = postSnapshot.getValue(LocationObject.class);
+                    Log.d("Time", locObj.getDate().toString());
+                    Log.d("LatLong", locObj.getLatitude().toString() + ";" + locObj.getLongitude().toString());
+                    gMap.clear();
+                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locObj.getLatitude(), locObj.getLongitude()), 14));
+                    gMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(locObj.getLatitude(), locObj.getLongitude()))
+                            .title(locObj.getUsername()));
+
+                    if(dateTV!=null){
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+                        dateTV.setText(sdf.format(locObj.getDate()));
+                    }
+
                 }
             }
 
@@ -215,7 +258,7 @@ public class LocationFragment extends Fragment implements
             }
         });
 
-        LocationObject obj = new LocationObject(getUsername(), lat, lng, new Date(System.currentTimeMillis()/1000L));
+        LocationObject obj = new LocationObject(getUsername(), lat, lng, new Date(System.currentTimeMillis()));
         // Create a new, auto-generated child of that chat location, and save our chat data there
 //        Log.d(TAG, "Pushed message '" + input + "' by " + mUsername);
 //        myFirebaseRef.push().setValue(obj);
