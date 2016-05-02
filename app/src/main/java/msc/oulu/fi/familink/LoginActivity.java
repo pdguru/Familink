@@ -12,7 +12,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
@@ -38,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String FRIEND_ID = "id";
     public static final String FRIEND_NAME = "name";
     public static final String FRIENDS = "friends";
-    public static final String ACCESS_TOKEN = "access_token";
+    public static final String PROFILE_PICTURE = "profile_picture";
 
     SharedPreferences mSharedPreferences;
 
@@ -104,17 +103,21 @@ public class LoginActivity extends AppCompatActivity {
                 new GraphRequest.GraphJSONObjectCallback() {
                     String mEmail;
                     String mName;
+                    String mProfilePicUrl;
 
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             mEmail = object.getString(EMAIL);
+                            Log.d(TAG, EMAIL + " is " + mEmail);
                             mName = object.getString(USERNAME);
+                            Log.d(TAG, USERNAME + " is " + mName);
+                            mProfilePicUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                            Log.d(TAG, PROFILE_PICTURE + " is " + mProfilePicUrl);
+
                             editor.putString(EMAIL, mEmail);
                             editor.putString(USERNAME, mName);
-
-                            Log.d(TAG, EMAIL + " is " + mEmail);
-                            Log.d(TAG, USERNAME + " is " + mName);
+                            editor.putString(PROFILE_PICTURE, mProfilePicUrl);
 
                             editor.apply();
                         } catch (JSONException e) {
@@ -123,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email");
+        parameters.putString("fields", "id,name,email,picture{url}");
         request.setParameters(parameters);
         request.executeAsync();
 

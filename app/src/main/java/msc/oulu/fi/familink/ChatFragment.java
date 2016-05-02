@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class ChatFragment extends ListFragment {
     private static final String TAG = ChatFragment.class.getSimpleName();
 
     private String mUsername;
-    private Firebase mFirebaseRef;
+    private Firebase myFirebaseRefChat;
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
 
@@ -64,7 +63,7 @@ public class ChatFragment extends ListFragment {
 
         setupUsername();
         // Initialize SDKs
-        mFirebaseRef = FirebaseHelper.myFirebaseRef.child("chat");
+        myFirebaseRefChat = FirebaseHelper.myFirebaseRef.child("chat");
     }
 
     @Override
@@ -84,7 +83,7 @@ public class ChatFragment extends ListFragment {
     private void setListViewAdapter() {
 
 //        final ListView listView = (ListView) getActivity().findViewById(R.id.list);
-        mChatListAdapter = new ChatListAdapter(mFirebaseRef.limit(50), getActivity(), R.layout.chat, mUsername);
+        mChatListAdapter = new ChatListAdapter(myFirebaseRefChat.limit(50), getActivity(), R.layout.chat, mUsername);
 
         // take advantage of ListFragment implementation
         this.setListAdapter(mChatListAdapter);
@@ -98,7 +97,7 @@ public class ChatFragment extends ListFragment {
             }
         });
 
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+        mConnectedListener = myFirebaseRefChat.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean connected = (Boolean) dataSnapshot.getValue();
@@ -119,13 +118,13 @@ public class ChatFragment extends ListFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+        myFirebaseRefChat.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
     private void setupUsername() {
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(MainActivity.FAMILINK_PREFERENCES, 0);
-        mUsername = mSharedPreferences.getString("username", null);
+        mUsername = mSharedPreferences.getString(LoginActivity.USERNAME, "unknown");
         if (mUsername == null) {
             Random r = new Random();
             // Assign a random user name if we don't have one saved.
@@ -141,9 +140,9 @@ public class ChatFragment extends ListFragment {
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             // Create our 'model', a Chat object
-            Chat chat = new Chat(input, mUsername, new Date(SystemClock.currentThreadTimeMillis()));
+            Chat chat = new Chat(input, mUsername, new Date(System.currentTimeMillis()));
             // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.push().setValue(chat);
+            myFirebaseRefChat.push().setValue(chat);
             Log.d(TAG, "Pushed message '" + input + "' by " + mUsername);
             inputText.setText("");
         }

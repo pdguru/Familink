@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected static final String FAMILINK_PREFERENCES = "familink_preferences";
 
     SharedPreferences mSharedPreferences;
-    private String mUsername = "";
+    private String mUsername = "Unknown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getLogin();
         }
 
-        String name = mUsername.equals("") ? "Unknown" : mUsername; // this info comes from login
-        setUserName(name);
+        mUsername = mSharedPreferences.getString(LoginActivity.USERNAME, mUsername);
+        setUserName(mUsername);
         super.onResume();
     }
 

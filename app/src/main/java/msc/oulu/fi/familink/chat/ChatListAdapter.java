@@ -35,7 +35,7 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 
         ImageView authorImage = (ImageView) view.findViewById(R.id.userPic);
 
-        ((TextView) view.findViewById(R.id.textTime)).setText(chat.getDate().toString());
+        ((TextView) view.findViewById(R.id.textTime)).setText((chat.getDate().toString()));
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
             textAuthor.setTextColor(Color.RED);
@@ -43,8 +43,8 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 // TODO set image correctly
 // authorImage.setImage(R.raw.user);
         } else {
-            textAuthor.setTextColor(Color.BLUE);
-            textChat.setTextColor(Color.BLUE);
+            textAuthor.setTextColor(Color.WHITE);
+            textChat.setTextColor(Color.WHITE);
         }
     }
 }
