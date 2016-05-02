@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void setUserName(String name) {
-        ((TextView) findViewById(R.id.heiMsg)).setText("Hei, " + sharedPreferences.getString(LoginActivity.USERNAME, ""));
+        ((TextView) findViewById(R.id.heiMsg)).setText("Hei, " + name);
     }
 
     @Override

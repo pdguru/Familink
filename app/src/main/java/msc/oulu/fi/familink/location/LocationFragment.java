@@ -228,7 +228,7 @@ public class LocationFragment extends Fragment implements
 //        String username[] = sharedPreferences.getString("email","").split("@");
 //        return username[0];
 
-        return sharedPreferences.getString("name","John");
+        return sharedPreferences.getString("email","");
     }
 
 
