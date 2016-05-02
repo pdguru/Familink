@@ -215,20 +215,20 @@ public class LocationFragment extends Fragment implements
             }
         });
 
-        LocationObject obj = new LocationObject(getUserEmail(), lat, lng, new Date(System.currentTimeMillis()/1000L));
+        LocationObject obj = new LocationObject(getUsername(), lat, lng, new Date(System.currentTimeMillis()/1000L));
         // Create a new, auto-generated child of that chat location, and save our chat data there
 //        Log.d(TAG, "Pushed message '" + input + "' by " + mUsername);
 //        myFirebaseRef.push().setValue(obj);
-        myFirebaseRef.child("/userLocation").child(getUserEmail()).setValue(obj);
+        myFirebaseRef.child("/userLocation").child(getUsername()).setValue(obj);
 
     }
 
-    private String getUserEmail() {
+    private String getUsername() {
          SharedPreferences sharedPreferences = getActivity().getSharedPreferences("familink_preferences", Context.MODE_PRIVATE);
 //        String username[] = sharedPreferences.getString("email","").split("@");
 //        return username[0];
 
-        return sharedPreferences.getString("email","");
+        return sharedPreferences.getString("name","");
     }
 
 
