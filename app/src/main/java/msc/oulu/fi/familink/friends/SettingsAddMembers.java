@@ -45,18 +45,15 @@ public class SettingsAddMembers extends Activity {
         Set<String> tmp2 = mSharedPreferences.getStringSet(LoginActivity.FRIENDS, new HashSet<String>(5));
         Object[] friends = mSharedPreferences.getStringSet(LoginActivity.FRIENDS, new HashSet<String>(5)).toArray();
 
-        List<Map<String, String>> data = new ArrayList<>();
+        List<Map<Integer, String>> data = new ArrayList<>();
         for (int i = 0; i < friends.length; i++) {
-            Map<String, String> tmp = new HashMap<>();
+            Map<Integer, String> tmp = new HashMap<>();
             String name = friends[i].toString();
             name = name.substring(name.indexOf("/")+1);
-            tmp.put("" + i, name);
+            tmp.put(i, name);
             Log.d(TAG, name);
             data.add(tmp);
         }
-
-        String[] from = {"#", "Name"};
-        int[] to = {1};
 
         mAddMembersListAdapter = new AddMembersListAdapter(getApplicationContext(), data);
 
@@ -67,11 +64,11 @@ public class SettingsAddMembers extends Activity {
     }
 
     public class AddMembersListAdapter extends BaseAdapter {
-        Context ctx;
-        List<Map<String,String>> data;
+        Context context;
+        List<Map<Integer,String>> data;
 
-        AddMembersListAdapter(Context ctx, List<Map<String,String>> data){
-            this.ctx = ctx;
+        AddMembersListAdapter(Context context, List<Map<Integer,String>> data){
+            this.context = context;
             this.data = data;
         }
 
